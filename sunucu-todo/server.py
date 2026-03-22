@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import uvicorn
 from argon2 import PasswordHasher
@@ -47,13 +48,38 @@ def build_app(data_store: FocusDataStore | None = None, secret_key: str | None =
     app.mount("/background", StaticFiles(directory=str(ROOT / "background")), name="background")
     app.mount("/static", StaticFiles(directory=str(ROOT / "static")), name="static")
 
+    def normalize_origin(value: str) -> str:
+        return value.rstrip("/").lower()
+
+    def configured_allowed_origins() -> set[str]:
+        raw = os.environ.get("ALLOWED_ORIGINS", "")
+        return {
+            normalize_origin(item.strip())
+            for item in raw.split(",")
+            if item.strip()
+        }
+
     def validate_origin(request: Request) -> None:
         origin = request.headers.get("origin")
         if not origin:
             return
 
-        expected_origin = f"{request.url.scheme}://{request.url.netloc}"
-        if origin != expected_origin:
+        expected_origins = configured_allowed_origins()
+        expected_origins.add(normalize_origin(f"{request.url.scheme}://{request.url.netloc}"))
+
+        forwarded_proto = request.headers.get("x-forwarded-proto")
+        forwarded_host = request.headers.get("x-forwarded-host") or request.headers.get("host")
+        if forwarded_proto and forwarded_host:
+            expected_origins.add(normalize_origin(f"{forwarded_proto}://{forwarded_host}"))
+
+        parsed_origin = urlsplit(origin)
+        current_host = request.headers.get("x-forwarded-host") or request.headers.get("host") or request.url.netloc
+        if parsed_origin.hostname and current_host:
+            current_host_name = current_host.split(":", 1)[0].lower()
+            if parsed_origin.hostname.lower() == current_host_name:
+                expected_origins.add(normalize_origin(origin))
+
+        if normalize_origin(origin) not in expected_origins:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid origin")
 
     def is_secure_cookie(request: Request) -> bool:

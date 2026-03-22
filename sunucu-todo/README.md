@@ -12,6 +12,7 @@ cp .env.example .env
 
 - `APP_SECRET_KEY`
 - `SERVER_NAME`
+- `ALLOWED_ORIGINS`
 - `APP_HTTP_PORT`
 - `APP_HTTPS_PORT`
 
@@ -54,6 +55,12 @@ Sadece HTTP ile test edeceksen `.env` icinde su ayari da yap:
 
 ```env
 SESSION_COOKIE_SECURE=false
+```
+
+Origin hatasi yasamamak icin domain ve local test adresini de `.env` icine ekle:
+
+```env
+ALLOWED_ORIGINS=https://agalar-todo.guardchatrie.com,http://192.168.1.145:8088
 ```
 
 Yerel agda hizli test icin sertifika istemeyen HTTP-only mod:
