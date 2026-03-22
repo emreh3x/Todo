@@ -56,6 +56,14 @@ Sadece HTTP ile test edeceksen `.env` icinde su ayari da yap:
 SESSION_COOKIE_SECURE=false
 ```
 
+Yerel agda hizli test icin sertifika istemeyen HTTP-only mod:
+
+```bash
+docker compose -f docker-compose.http.yml up -d --build
+```
+
+Bu mod sadece `APP_HTTP_PORT` uzerinden yayin yapar ve SSL sertifikasi istemez.
+
 ## Notlar
 
 - `data/` klasoru otomatik olusur ve kalici kullanici verilerini tutar.
