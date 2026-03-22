@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Space</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="app-locked">
+    <video autoplay muted loop id="video-background">
+        <source src="/background/fireplace.mp4" type="video/mp4">
+    </video>
+    <div class="page-overlay"></div>
+
+    <div id="auth-screen" class="auth-screen">
+        <form id="login-form" class="auth-card glass-box">
+            <p class="eyebrow">Private Workspace</p>
+            <h1>Focus Space</h1>
+            <p class="auth-copy">Kendi hesabinla giris yap. Notlarin, gorevlerin, linklerin ve kutu duzenin sana ozel olarak yuklenir.</p>
+            <label class="field-label" for="login-username">Username</label>
+            <input id="login-username" name="username" type="text" autocomplete="username" required>
+            <label class="field-label" for="login-password">Password</label>
+            <input id="login-password" name="password" type="password" autocomplete="current-password" required>
+            <button id="login-submit" type="submit" class="primary">Sign In</button>
+            <p id="login-error" class="auth-error" hidden></p>
+        </form>
+    </div>
+
+    <main class="page-shell">
+        <div id="layout-stage" class="layout-stage">
+            <div class="stage-banner">Kutulari surukle, koseden boyutlandir. Duzenin hesabina otomatik kaydolur.</div>
+
+            <div class="session-bar glass-box">
+                <span id="account-name">Guest</span>
+                <button id="logout-btn" type="button">Logout</button>
+            </div>
+
+            <section id="notes-container" class="glass-box panel-card" data-panel-id="notes">
+                <div class="panel-title drag-handle">
+                    <h2>Notes</h2>
+                    <span id="save-status" class="handle-hint">Waiting</span>
+                </div>
+                <p class="panel-note">Notlar sana ozel kaydolur ve her giriste geri gelir.</p>
+                <textarea id="notes-area" placeholder="Write here..."></textarea>
+            </section>
+
+            <section id="task-container" class="glass-box panel-card" data-panel-id="tasks">
+                <div class="panel-title drag-handle">
+                    <h2>To-Do List</h2>
+                    <span class="handle-hint">Drag</span>
+                </div>
+                <div class="input-row">
+                    <input type="text" id="task-input" placeholder="New task...">
+                    <button class="primary" id="add-task-btn" type="button">Add</button>
+                </div>
+                <ul id="task-list" class="task-list"></ul>
+                <p id="task-empty" class="empty-text">Henuz gorev eklenmedi.</p>
+            </section>
+
+            <section id="music-container" class="glass-box panel-card" data-panel-id="music">
+                <div class="panel-title drag-handle">
+                    <h2>Music Player</h2>
+                    <span class="handle-hint">Drag</span>
+                </div>
+                <p class="panel-note">Linkler artik hesabina ozel saklanir.</p>
+                <details class="link-manager" data-no-drag="true">
+                    <summary>Manage Links</summary>
+                    <div class="link-editor">
+                        <input type="text" id="link-title-input" placeholder="Title">
+                        <input type="text" id="link-url-input" placeholder="https://...">
+                        <button class="primary" id="add-link-btn" type="button">Add Link</button>
+                    </div>
+                </details>
+                <ul id="link-list" class="link-list"></ul>
+                <p id="link-empty" class="empty-text">Henuz link eklenmedi.</p>
+                <div id="player-area">
+                    <span class="empty-text">Bir link sec.</span>
+                </div>
+            </section>
+
+            <section id="timer-container" class="glass-box panel-card" data-panel-id="timer">
+                <div class="panel-title drag-handle">
+                    <h3>Timer</h3>
+                    <span class="handle-hint">Drag</span>
+                </div>
+                <div class="timer-controls">
+                    <input type="number" id="minutes" min="1" placeholder="Min">
+                    <button id="start-timer-btn" class="primary" type="button">Start</button>
+                </div>
+                <div id="display">00:00</div>
+            </section>
+
+            <section id="sound-container" class="glass-box panel-card" data-panel-id="sound">
+                <div class="panel-title drag-handle">
+                    <h3>Sound</h3>
+                    <span class="handle-hint">Drag</span>
+                </div>
+                <button id="mute-btn" type="button">Sound Off</button>
+                <p class="panel-note">Arka plan videosunun sesini burada acip kapatabilirsin.</p>
+            </section>
+        </div>
+    </main>
+
+    <script src="/static/app.js" defer></script>
+</body>
+</html>
