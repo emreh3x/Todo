@@ -12,6 +12,8 @@ cp .env.example .env
 
 - `APP_SECRET_KEY`
 - `SERVER_NAME`
+- `APP_HTTP_PORT`
+- `APP_HTTPS_PORT`
 
 ## 2. SSL sertifikasi
 
@@ -32,9 +34,27 @@ python scripts/create_user.py --username admin --password 'guclu-bir-sifre' --ad
 docker compose up -d --build
 ```
 
+Varsayilan portlar:
+
+- HTTP: `8088`
+- HTTPS: `8448`
+
 ## 5. Giris
 
-Uygulama acildiktan sonra olusturdugun kullanici ile domain uzerinden giris yapabilirsin.
+Uygulama acildiktan sonra olusturdugun kullanici ile secilen port uzerinden giris yapabilirsin.
+
+Ornek:
+
+- `http://sunucu-ip:8088`
+- `https://sunucu-ip:8448`
+
+Eger domaine mevcut bir reverse proxy ile baglayacaksan, onu bu portlara yonlendirebilirsin.
+
+Sadece HTTP ile test edeceksen `.env` icinde su ayari da yap:
+
+```env
+SESSION_COOKIE_SECURE=false
+```
 
 ## Notlar
 
