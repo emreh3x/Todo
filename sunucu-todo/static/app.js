@@ -213,25 +213,6 @@ function syncLayoutEntryFromPanel(panelId) {
     );
 }
 
-function expandPanelIfTooSmall(panelId) {
-    const panel = panelMap.get(panelId);
-    const defaultEntry = DEFAULT_LAYOUT[panelId];
-    if (!panel || !defaultEntry) {
-        return;
-    }
-
-    const stageWidth = getStageWidth();
-    const stageHeight = getStageHeight();
-    const defaultWidth = Math.round(defaultEntry.width * stageWidth);
-    const defaultHeight = Math.round(defaultEntry.height * stageHeight);
-
-    panel.style.width = `${Math.min(Math.max(panel.offsetWidth, defaultWidth), stageWidth)}px`;
-    panel.style.height = `${Math.min(Math.max(panel.offsetHeight, defaultHeight), stageHeight)}px`;
-    panel.style.left = `${Math.round(clamp(panel.offsetLeft, 0, Math.max(0, stageWidth - panel.offsetWidth)))}px`;
-    panel.style.top = `${Math.round(clamp(panel.offsetTop, 0, Math.max(0, stageHeight - panel.offsetHeight)))}px`;
-    syncLayoutEntryFromPanel(panelId);
-}
-
 async function fetchJson(url, options = {}) {
     const response = await fetch(url, {
         credentials: "same-origin",
@@ -528,7 +509,6 @@ function startDrag(event) {
 
     const panelId = panel.dataset.panelId;
     bringPanelToFront(panelId);
-    expandPanelIfTooSmall(panelId);
     activeDrag = {
         panelId,
         startX: event.clientX,
