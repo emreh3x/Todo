@@ -213,6 +213,12 @@ function syncLayoutEntryFromPanel(panelId) {
     );
 }
 
+function syncAllLayoutEntriesFromPanels() {
+    panelMap.forEach((_, panelId) => {
+        syncLayoutEntryFromPanel(panelId);
+    });
+}
+
 async function fetchJson(url, options = {}) {
     const response = await fetch(url, {
         credentials: "same-origin",
@@ -508,6 +514,7 @@ function startDrag(event) {
     }
 
     const panelId = panel.dataset.panelId;
+    syncLayoutEntryFromPanel(panelId);
     bringPanelToFront(panelId);
     activeDrag = {
         panelId,
@@ -578,6 +585,7 @@ function handleWindowResize() {
         cancelAnimationFrame(resizeFrame);
     }
     resizeFrame = requestAnimationFrame(() => {
+        syncAllLayoutEntriesFromPanels();
         applyLayout();
     });
 }
